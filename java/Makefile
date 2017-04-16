@@ -4,7 +4,6 @@ ifeq ($(JAVA_HOME),)
 endif
 
 VWLIBS := -L../vowpalwabbit -l vw
-STDLIBS = $(BOOST_LIBRARY) $(LIBS)
 JAVA_INCLUDE = -I $(JAVA_HOME)/include
 
 ifeq ($(UNAME), Linux)
@@ -38,7 +37,7 @@ pom_version: pom.xml
 
 target/vw_jni.lib: $(jni_OBJS) ../vowpalwabbit/main.o ../vowpalwabbit/libvw.a ../vowpalwabbit/liballreduce.a
 	mkdir -p target;
-	$(CXX) -shared $(FLAGS) -o $@ $^ $(VWLIBS) $(STDLIBS) $(JAVA_INCLUDE)
+	$(CXX) -shared $(FLAGS) -o $@ $^ $(VWLIBS) $(BOOST_LIBRARY) -l pthread -l z $(JAVA_INCLUDE) -static-libstdc++ -static-libgcc -Wl,-Bstatic -l boost_program_options -Wl,-Bdynamic
 
 %.o: %.cc  %.h
 	$(CXX) $(FLAGS) -c $< -o $@ $(JAVA_INCLUDE)

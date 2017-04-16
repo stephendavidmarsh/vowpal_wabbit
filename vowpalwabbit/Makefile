@@ -2,7 +2,6 @@ BINARIES = vw active_interactor
 MANPAGES = vw.1
 
 VWLIBS := -L. -l vw -l allreduce
-STDLIBS = $(BOOST_LIBRARY) $(LIBS)
 
 all:
 	cd ..; $(MAKE)
@@ -43,7 +42,7 @@ libvw.a: $(filter-out vw.o,$(vw_OBJECTS))
 	ar rcs $@ $+
 
 vw: main.o libvw.a liballreduce.a
-	$(CXX) $(FLAGS) -o $@ $< $(VWLIBS) $(STDLIBS)
+	$(CXX) $(FLAGS) -o $@ $< $(VWLIBS) $(BOOST_LIBRARY) -l pthread -l z -static-libstdc++ -static-libgcc -Wl,-Bstatic -l boost_program_options -Wl,-Bdynamic
 
 active_interactor: active_interactor.cc
 	$(CXX) $(FLAGS) -o $@ $+
